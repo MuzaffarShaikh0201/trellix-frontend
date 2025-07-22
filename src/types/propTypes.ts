@@ -1,7 +1,9 @@
+import type React from "react";
+
 export type ButtonProps = {
 	title: string;
 	fill: boolean;
-	imgSrc?: string;
+	imgSrc?: string | React.ReactNode;
 	handleClick: () => void;
 	disabled: boolean;
 };

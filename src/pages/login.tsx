@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
+import { cn } from "../lib/utils";
 import Button from "../components/Button";
 import FormField from "../components/FormField";
-import { cn } from "../lib/utils";
-import { GridPattern } from "../components/GridPattern";
+import { AnimatedGridPattern } from "../components/AnimatedGridPattern";
 
 const Login = () => {
 	const [email, setemail] = useState("");
@@ -11,29 +11,21 @@ const Login = () => {
 
 	return (
 		<div className="h-screen w-screen flex justify-center items-center">
-			<div className="bg-background-primary h-full w-[70%] z-0">
-				<GridPattern
-					squares={[
-						[13, 10],
-						[15, 13],
-						[25, 5],
-						[5, 12],
-						[22, 10],
-						[21, 18],
-						[18, 7],
-						[24, 1],
-						[27, 12],
-						[28, 7],
-					]}
+			<div className="bg-background-primary h-full w-[70%] z-0 hidden md:block overflow-hidden">
+				<AnimatedGridPattern
+					numSquares={30}
+					maxOpacity={0.3}
+					duration={3}
+					repeatDelay={1}
 					className={cn(
-						"[mask-image:radial-gradient(400px_circle_at_center,white,transparent)]",
-						"inset-x-[-30%] inset-y-[-30%] h-[100%] skew-y-12 hidden md:block"
+						"[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+						"inset-x-[-30%] inset-y-[-25%] h-[100%] skew-y-12"
 					)}
 				/>
 				<div className="flex flex-col justify-center items-center h-full gap-2">
 					<div className="flex justify-center items-center h-full gap-2">
 						<img
-							src="public/layers.svg"
+							src="/layers.svg"
 							alt="Logo"
 							className="w-32 h-32 mb-4"
 						/>
@@ -61,7 +53,7 @@ const Login = () => {
 					</div>
 				</div>
 			</div>
-			<div className="bg-background-secondary h-full w-[30%] flex justify-center items-center p-4">
+			<div className="bg-background-secondary h-full w-full md:w-[30%] flex justify-center items-center p-4">
 				<div className="flex flex-col justify-center items-center w-full p-4">
 					<div className="flex flex-col justify-center items-start w-full p-4 mb-2">
 						<h1 className="text-3xl font-bold text-text-primary">

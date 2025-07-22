@@ -20,7 +20,11 @@ const Button: React.FC<ButtonProps> = ({
 		>
 			<div className="flex items-center justify-center gap-2">
 				<span>{title}</span>
-				{imgSrc && <img src={imgSrc} alt={title} className="h-6" />}
+				{typeof imgSrc === "string" ? (
+					<img src={imgSrc} alt={title} className="h-6" />
+				) : typeof imgSrc === "object" ? (
+					imgSrc
+				) : null}
 			</div>
 		</button>
 	);
