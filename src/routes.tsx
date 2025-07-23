@@ -9,7 +9,7 @@ const authenticatedLoader = ({ request }: { request: Request }) => {
 	if (!isAuthenticated()) {
 		const url = new URL(request.url);
 		return redirect(
-			`/login?redirectTo=${encodeURIComponent(url.pathname)}`
+			`/auth/login?redirectTo=${encodeURIComponent(url.pathname)}`
 		);
 	}
 
@@ -18,6 +18,7 @@ const authenticatedLoader = ({ request }: { request: Request }) => {
 
 const router = createBrowserRouter([
 	{
+		path: "/auth",
 		element: <AuthLayout />,
 		children: [
 			{
