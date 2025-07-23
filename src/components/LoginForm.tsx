@@ -84,7 +84,7 @@ const LoginForm = () => {
 					<p className="text-sm text-text-secondary">
 						Don't have an account?{" "}
 						<a
-							href="/auth/signup"
+							href="/signup"
 							className="text-primary hover:underline"
 						>
 							Sign up
