@@ -1,5 +1,6 @@
 import { createBrowserRouter, redirect } from "react-router";
 
+import AppInfo from "./pages/AppInfo.tsx";
 import Dashboard from "./pages/dashboard.tsx";
 import { isAuthenticated } from "./lib/utils.ts";
 import AuthLayout from "./layouts/AuthLayout.tsx";
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
 				element: <LoginForm />,
 			},
 		],
+	},
+	{
+		path: "/info",
+		element: <AppInfo />,
 	},
 	{
 		path: "/",
