@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import Button from "./Button";
 import FormField from "./FormField";
+import GoogleLogo from "../assets/google.svg";
 import { useNavigate, useSearchParams } from "react-router";
 
 const LoginForm = () => {
@@ -72,7 +73,7 @@ const LoginForm = () => {
 					/>
 					<Button
 						title="Login with "
-						imgSrc="src/assets/google.svg"
+						imgSrc={GoogleLogo}
 						fill={false}
 						handleClick={() =>
 							console.log("Login with google clicked")
