@@ -9,18 +9,32 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
 	const getInitialTheme = () => {
-		if (typeof window !== "undefined" && window.matchMedia) {
-			return window.matchMedia("(prefers-color-scheme: dark)").matches
-				? "dark"
-				: "light";
+		if (typeof window !== "undefined") {
+			const storedTheme = window.localStorage.getItem("theme");
+			if (storedTheme) {
+				return storedTheme;
+			}
+			if (window.matchMedia) {
+				if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+					window.localStorage.setItem("theme", "dark");
+					return "dark";
+				}
+				if (
+					window.matchMedia("(prefers-color-scheme: light)").matches
+				) {
+					window.localStorage.setItem("theme", "light");
+					return "light";
+				}
+			}
 		}
-		return "light"; // fallback for SSR or unsupported browsers
+		return "light";
 	};
 
 	const [theme, setTheme] = useState(getInitialTheme);
 
 	useEffect(() => {
 		document.documentElement.setAttribute("data-theme", theme);
+		window.localStorage.setItem("theme", theme);
 	}, [theme]);
 
 	const toggleTheme = () => {

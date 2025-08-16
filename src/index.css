@@ -53,3 +53,8 @@
 	font-family: "Poppins", sans-serif;
 	box-sizing: border-box;
 }
+
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: var(--text-secondary) var(--background-secondary);
+}

@@ -1,10 +1,11 @@
 import { createBrowserRouter, redirect } from "react-router";
 
 import AppInfo from "./pages/AppInfo.tsx";
-import Dashboard from "./pages/dashboard.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 import { isAuthenticated } from "./lib/utils.ts";
 import AuthLayout from "./layouts/AuthLayout.tsx";
 import LoginForm from "./components/LoginForm.tsx";
+import SignUpForm from "./components/SignupForm.tsx";
 
 const authenticatedLoader = ({ request }: { request: Request }) => {
 	if (!isAuthenticated()) {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
 			{
 				path: "/login",
 				element: <LoginForm />,
+			},
+			{
+				path: "/signup",
+				element: <SignUpForm />,
 			},
 		],
 	},

@@ -5,9 +5,12 @@ import FormField from "./FormField";
 import GoogleLogo from "../assets/google.svg";
 import { useNavigate, useSearchParams } from "react-router";
 
-const LoginForm = () => {
+const SignUpForm = () => {
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
 	const [email, setemail] = useState("");
 	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 
 	const [searchParams] = useSearchParams();
 	const redirectTo = searchParams.get("redirectTo") || "/";
@@ -30,13 +33,33 @@ const LoginForm = () => {
 			<div className="w-full h-lvh flex flex-col justify-evenly items-center lg:p-4 p-2">
 				<div className="flex flex-col justify-center items-start w-full lg:p-4 p-2 mb-2">
 					<h1 className="text-xl font-bold text-text-primary">
-						Login
+						SignUp
 					</h1>
 					<p className="text-xs text-text-secondary">
-						Welcome back! Please login to your account.
+						Welcome! Please create your account to get started.
 					</p>
 				</div>
-				<div className="w-full flex flex-col justify-center items-start lg:p-4 p-2 gap-4 mt-4">
+				<div className="w-full flex flex-col justify-center items-start lg:p-4 p-2 gap-4 mt-2">
+					<div className="w-full flex justify-center items-center gap-4">
+						<FormField
+							title="First Name"
+							placeholder="Enter your first name..."
+							type="text"
+							value={firstName}
+							handleChange={(
+								e: React.ChangeEvent<HTMLInputElement>
+							) => setFirstName(e.target.value)}
+						/>
+						<FormField
+							title="Last Name"
+							placeholder="Enter your last name..."
+							type="text"
+							value={lastName}
+							handleChange={(
+								e: React.ChangeEvent<HTMLInputElement>
+							) => setLastName(e.target.value)}
+						/>
+					</div>
 					<FormField
 						title="Email"
 						placeholder="Enter your email..."
@@ -55,24 +78,25 @@ const LoginForm = () => {
 							e: React.ChangeEvent<HTMLInputElement>
 						) => setPassword(e.target.value)}
 					/>
-				</div>
-				<div className="w-full flex justify-end items-center lg:p-4 p-2">
-					<a
-						href="#"
-						className="text-xs text-primary hover:underline"
-					>
-						forgot password?
-					</a>
+					<FormField
+						title="Confirm Password"
+						placeholder="Confirm your password..."
+						type="password"
+						value={confirmPassword}
+						handleChange={(
+							e: React.ChangeEvent<HTMLInputElement>
+						) => setConfirmPassword(e.target.value)}
+					/>
 				</div>
 				<div className="w-full flex flex-col gap-4 justify-center items-center lg:p-4 p-2">
 					<Button
-						title="Login"
+						title="Sign Up"
 						fill={true}
 						handleClick={handleLogin}
 						disabled={false}
 					/>
 					<Button
-						title="Login with "
+						title="Sign Up with "
 						imgSrc={GoogleLogo}
 						fill={false}
 						handleClick={() =>
@@ -83,12 +107,12 @@ const LoginForm = () => {
 				</div>
 				<div className="w-full flex justify-center items-center lg:p-4 p-2">
 					<p className="text-xs text-text-secondary">
-						Don't have an account?{" "}
+						Already have an account?{" "}
 						<a
-							href="/signup"
+							href="/login"
 							className="text-primary hover:underline"
 						>
-							Sign up
+							Login
 						</a>
 					</p>
 				</div>
@@ -108,4 +132,4 @@ const LoginForm = () => {
 	);
 };
 
-export default LoginForm;
+export default SignUpForm;

@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> = ({
 		<button
 			className={`w-full ${fill ? "bg-primary" : "bg-transparent"} ${
 				fill ? "text-white" : "text-text-primary"
-			} p-2 rounded-md border-2 border-primary font-bold cursor-pointer ${
+			} p-2 rounded-md border-2 border-primary text-sm font-bold cursor-pointer ${
 				fill ? "active:bg-blue-600" : "active:bg-primary"
 			} transition-colors`}
 			onClick={handleClick}
@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
 			<div className="flex items-center justify-center gap-2">
 				<span>{title}</span>
 				{typeof imgSrc === "string" ? (
-					<img src={imgSrc} alt={title} className="h-6" />
+					<img src={imgSrc} alt={title} className="h-4" />
 				) : typeof imgSrc === "object" ? (
 					imgSrc
 				) : null}

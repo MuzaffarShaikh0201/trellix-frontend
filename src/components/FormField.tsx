@@ -20,7 +20,7 @@ const FormField: React.FC<FormFieldProps> = ({
 		>
 			<label
 				htmlFor=""
-				className={`text-sm font-light ${
+				className={`text-xs font-light ${
 					isFocused ? "text-primary" : "text-text-primary"
 				}`}
 			>
@@ -35,7 +35,7 @@ const FormField: React.FC<FormFieldProps> = ({
 					type={showPassword && type === "password" ? "text" : type}
 					className={`${
 						type !== "password" ? "w-full" : "w-[90%]"
-					} bg-tint text-text-primary border-none outline-none placeholder:text-text-secondary placeholder:text-sm`}
+					} bg-tint text-xs text-text-primary border-none outline-none placeholder:text-text-secondary placeholder:text-xs`}
 					value={value}
 					onChange={handleChange}
 					placeholder={placeholder}

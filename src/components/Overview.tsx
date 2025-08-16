@@ -7,7 +7,7 @@ const Overview = () => {
 			<AnimatedGridPattern
 				numSquares={30}
 				maxOpacity={0.3}
-				duration={2}
+				duration={3}
 				repeatDelay={1}
 				className={cn(
 					"[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
@@ -37,7 +37,7 @@ const Overview = () => {
 						&copy; Trellix 2025
 					</p>
 					<a
-						href="#"
+						href="/info#terms-of-use"
 						className="text-sm text-text-secondary hover:underline"
 					>
 						Terms of use & Privacy Policy

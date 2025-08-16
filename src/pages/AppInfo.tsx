@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
+
 import MinNavbar from "../components/MinNavbar";
+import { IoIosArrowForward } from "react-icons/io";
 
 const AppInfo = () => {
 	const navigate = useNavigate();
@@ -13,7 +15,7 @@ const AppInfo = () => {
 			if (element) {
 				element.scrollIntoView({
 					behavior: "smooth",
-					block: "center",
+					block: "start",
 				});
 			}
 		}
@@ -24,10 +26,10 @@ const AppInfo = () => {
 	};
 
 	return (
-		<div className="flex min-h-screen flex-col bg-background-primary">
+		<div className="h-screen w-screen px-4 bg-background-primary flex flex-col justify-start items-center">
 			<MinNavbar />
-			<div className="flex flex-col-reverse md:flex-row justify-evenly items-start p-8 gap-4">
-				<div className="flex-1 max-w-4xl flex flex-col overflow-y-auto gap-8 justify-center">
+			<div className="w-full h-lvh p-4 flex flex-col-reverse lg:flex-row justify-evenly items-start gap-4 overflow-hidden">
+				<div className="w-full lg:w-3/4 h-full flex flex-col justify-start items-start gap-8 overflow-auto custom-scrollbar">
 					<section
 						id="about"
 						className="flex flex-col justify-start items-start gap-2"
@@ -36,9 +38,12 @@ const AppInfo = () => {
 							About
 						</h1>
 						<p className="text-sm text-text-primary pl-4">
-							Trellix is a modern, React-powered project
-							management app inspired by Kanban, built for teams
-							to organize tasks, collaborate, and stay productive.
+							Trellix is a modern project management app designed
+							to help teams collaborate efficiently and get work
+							done. Inspired by the Kanban methodology, Trellix
+							provides a simple yet powerful workspace where you
+							can organize tasks, manage projects, and track
+							progress, all in one place.
 						</p>
 					</section>
 					<section
@@ -150,27 +155,115 @@ const AppInfo = () => {
 						<h1 className="text-2xl font-bold text-text-primary">
 							Privacy Policy
 						</h1>
+						<div className="flex flex-col justify-start items-start gap-2 pl-4">
+							<p className="text-sm text-text-primary font-bold">
+								Effective Date: [Date]
+							</p>
+							<p className="text-sm text-text-primary">
+								This Privacy Policy explains how Trellix
+								collects, uses, and protects your information.
+							</p>
+							<ol className="flex flex-col list-decimal list-inside gap-2">
+								<li className="text-md text-text-primary font-bold">
+									Information We Collect
+									<p className="text-sm text-text-primary font-normal pl-4">
+										We may collect the following:
+									</p>
+									<ul className="list-disc list-inside pl-4">
+										<li className="text-sm text-text-primary font-normal">
+											Your name or email (if login is
+											used)
+										</li>
+										<li className="text-sm text-text-primary font-normal">
+											Project, task, and note content
+										</li>
+										<li className="text-sm text-text-primary font-normal">
+											Basic usage analytics (optional)
+										</li>
+									</ul>
+								</li>
+								<li className="text-md text-text-primary font-bold">
+									How We Use Your Information
+									<p className="text-sm text-text-primary font-normal pl-4">
+										We use your data to:
+									</p>
+									<ul className="list-disc list-inside pl-4">
+										<li className="text-sm text-text-primary font-normal">
+											Provide and improve the App
+										</li>
+										<li className="text-sm text-text-primary font-normal">
+											Respond to feedback or support
+											requests
+										</li>
+										<li className="text-sm text-text-primary font-normal">
+											Analyze usage trends (if enabled)
+										</li>
+									</ul>
+								</li>
+								<li className="text-md text-text-primary font-bold">
+									Data Storage
+									<p className="text-sm text-text-primary font-normal pl-4">
+										All data is stored securely. But we are
+										not guaranteed to keep your data safe.
+									</p>
+								</li>
+								<li className="text-md text-text-primary font-bold">
+									Third-Party Services
+									<p className="text-sm text-text-primary font-normal pl-4">
+										We do not sell or share your data with
+										third parties. If the App uses any
+										third-party services (e.g. cloud
+										storage, analytics), it will be listed
+										here with links to their policies.
+									</p>
+								</li>
+								<li className="text-md text-text-primary font-bold">
+									Cookies
+									<p className="text-sm text-text-primary font-normal pl-4">
+										If Trellix is web-based, cookies may be
+										used to maintain session state or
+										remember preferences. You can block
+										cookies via browser settings.
+									</p>
+								</li>
+								<li className="text-md text-text-primary font-bold">
+									Your Rights
+									<p className="text-sm text-text-primary font-normal pl-4">
+										You can request data deletion at any
+										time by contacting us at [Your Email].
+									</p>
+								</li>
+								<li className="text-md text-text-primary font-bold">
+									Changes to This Policy
+									<p className="text-sm text-text-primary font-normal pl-4">
+										We may update this policy. Changes will
+										be reflected with a new effective date.
+									</p>
+								</li>
+							</ol>
+						</div>
 					</section>
 				</div>
-				<div className="w-auto flex flex-col justify-start items-start border-l-1 border-text-secondary p-4 sticky md:top-22 md;right-0">
+				<div className="sticky lg:p-4 flex lg:flex-col justify-start items-center lg:items-start gap-2 lg:border-l border-text-secondary">
+					<IoIosArrowForward className="w-4 h-4 text-text-primary lg:hidden" />
 					<a
 						href="#about"
 						onClick={() => handleNavigate("about")}
-						className="text-text-primary text-sm font-medium hover:underline"
+						className="text-text-primary text-sm font-medium hover:underline underline lg:no-underline"
 					>
 						About
 					</a>
 					<a
 						href="#terms-of-use"
 						onClick={() => handleNavigate("terms-of-use")}
-						className="text-text-primary text-sm font-medium hover:underline"
+						className="text-text-primary text-sm font-medium hover:underline underline lg:no-underline"
 					>
 						Terms of Use
 					</a>
 					<a
 						href="#privacy-policy"
 						onClick={() => handleNavigate("privacy-policy")}
-						className="text-text-primary text-sm font-medium hover:underline"
+						className="text-text-primary text-sm font-medium hover:underline underline lg:no-underline"
 					>
 						Privacy Policy
 					</a>
