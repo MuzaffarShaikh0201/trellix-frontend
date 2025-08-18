@@ -1,9 +1,18 @@
 import React from "react";
-import type { ButtonProps } from "../types/propTypes";
+
+export type ButtonProps = {
+	title: string;
+	fill: boolean;
+	type: "button" | "submit" | "reset";
+	imgSrc?: string | React.ReactNode;
+	handleClick?: (e: React.MouseEvent) => void;
+	disabled: boolean;
+};
 
 const Button: React.FC<ButtonProps> = ({
 	title,
 	fill = true,
+	type = "button",
 	imgSrc = undefined,
 	handleClick,
 	disabled = false,
@@ -17,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
 			} transition-colors`}
 			onClick={handleClick}
 			disabled={disabled}
+			type={type}
 		>
 			<div className="flex items-center justify-center gap-2">
 				<span>{title}</span>

@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
-import type { FormFieldProps } from "../types/propTypes";
+
+export type FormFieldProps = {
+	title: string;
+	placeholder: string;
+	type: React.HTMLInputTypeAttribute;
+	value: string;
+	handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
 const FormField: React.FC<FormFieldProps> = ({
 	title,
@@ -19,7 +26,7 @@ const FormField: React.FC<FormFieldProps> = ({
 			onBlur={() => setIsFocused(false)}
 		>
 			<label
-				htmlFor=""
+				htmlFor={title}
 				className={`text-xs font-light ${
 					isFocused ? "text-primary" : "text-text-primary"
 				}`}
@@ -32,6 +39,7 @@ const FormField: React.FC<FormFieldProps> = ({
 				}`}
 			>
 				<input
+					id={title}
 					type={showPassword && type === "password" ? "text" : type}
 					className={`${
 						type !== "password" ? "w-full" : "w-[90%]"
