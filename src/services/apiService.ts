@@ -130,16 +130,16 @@ class ApiService {
 
 	// Auth token management
 	public getTokens(): AuthTokens | null {
-		const tokens = sessionStorage.getItem("auth_tokens");
+		const tokens = localStorage.getItem("sessionData");
 		return tokens ? JSON.parse(tokens) : null;
 	}
 
 	private storeTokens(tokens: AuthTokens): void {
-		sessionStorage.setItem("auth_tokens", JSON.stringify(tokens));
+		localStorage.setItem("sessionData", JSON.stringify(tokens));
 	}
 
 	private clearAuthData(): void {
-		sessionStorage.removeItem("auth_tokens");
+		localStorage.removeItem("sessionData");
 		localStorage.removeItem("userData");
 	}
 
