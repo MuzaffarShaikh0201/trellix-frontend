@@ -4,6 +4,7 @@ import React, {
 	useEffect,
 	useState,
 	useCallback,
+	useRef,
 } from "react";
 import { apiService } from "../services/apiService";
 import { showAlert } from "../services/alertService";
@@ -11,29 +12,33 @@ import { showAlert } from "../services/alertService";
 interface AuthContextType {
 	isAuthenticated: boolean;
 	user: any;
-	login: (credentials: any) => Promise<boolean>;
+	login: (credentials: any) => Promise<void>;
 	logout: () => void;
 	loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Create a hook for accessing the context
-const useAuthContext = () => {
+// Create a separate hook
+export const useAuth = () => {
 	const context = useContext(AuthContext);
 	if (!context) throw new Error("useAuth must be used within AuthProvider");
 	return context;
 };
 
-// Main provider component
-const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+// Export provider separately
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [user, setUser] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
+	const initialized = useRef(false);
 
 	const initializeAuth = useCallback(async () => {
+		if (initialized.current) return;
+		initialized.current = true;
+
 		const userData = localStorage.getItem("userData");
 		if (userData) setUser(JSON.parse(userData));
 
@@ -72,8 +77,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 				"success",
 				"You have been logged in successfully"
 			);
-
-			return true;
 		} catch (error) {
 			setIsAuthenticated(false);
 			throw error;
@@ -96,6 +99,3 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		</AuthContext.Provider>
 	);
 };
-
-// Named exports only
-export { AuthProvider, useAuthContext as useAuth };

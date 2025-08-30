@@ -41,6 +41,7 @@ class ApiService {
 	private instance: AxiosInstance;
 	private isRefreshing = false;
 	private failedRequests: ((token: string) => void)[] = [];
+	private pendingRequests = new Map<string, Promise<any>>();
 
 	constructor() {
 		this.instance = axios.create({
@@ -143,8 +144,28 @@ class ApiService {
 		localStorage.removeItem("userData");
 	}
 
-	// API methods
+	// API methods with deduplication
 	public async refreshToken(): Promise<AuthTokens> {
+		// Create a unique key for this request
+		const requestKey = `refreshToken`;
+
+		// If this request is already in progress, return the existing promise
+		if (this.pendingRequests.has(requestKey)) {
+			return this.pendingRequests.get(requestKey);
+		}
+
+		const refreshPromise = this.performRefreshToken();
+		this.pendingRequests.set(requestKey, refreshPromise);
+
+		try {
+			const result = await refreshPromise;
+			return result;
+		} finally {
+			this.pendingRequests.delete(requestKey);
+		}
+	}
+
+	private async performRefreshToken(): Promise<AuthTokens> {
 		const tokens = this.getTokens();
 		if (!tokens?.refresh_token)
 			throw new Error("No refresh token available");
@@ -163,6 +184,26 @@ class ApiService {
 	}
 
 	public async login(
+		credentials: any
+	): Promise<{ tokens: AuthTokens; user: UserData }> {
+		const requestKey = `login:${JSON.stringify(credentials)}`;
+
+		if (this.pendingRequests.has(requestKey)) {
+			return this.pendingRequests.get(requestKey);
+		}
+
+		const loginPromise = this.performLogin(credentials);
+		this.pendingRequests.set(requestKey, loginPromise);
+
+		try {
+			const result = await loginPromise;
+			return result;
+		} finally {
+			this.pendingRequests.delete(requestKey);
+		}
+	}
+
+	private async performLogin(
 		credentials: any
 	): Promise<{ tokens: AuthTokens; user: UserData }> {
 		const response = await axios.post<ApiResponse>(
@@ -194,6 +235,24 @@ class ApiService {
 	}
 
 	public async initializeAuth(): Promise<boolean> {
+		const requestKey = `initializeAuth`;
+
+		if (this.pendingRequests.has(requestKey)) {
+			return this.pendingRequests.get(requestKey);
+		}
+
+		const initPromise = this.performInitializeAuth();
+		this.pendingRequests.set(requestKey, initPromise);
+
+		try {
+			const result = await initPromise;
+			return result;
+		} finally {
+			this.pendingRequests.delete(requestKey);
+		}
+	}
+
+	private async performInitializeAuth(): Promise<boolean> {
 		const tokens = this.getTokens();
 
 		if (tokens?.refresh_token) {
@@ -208,8 +267,30 @@ class ApiService {
 		return false;
 	}
 
-	// Generic API call method
+	// Generic API call method with deduplication
 	public async request<T = any>(
+		config: AxiosRequestConfig
+	): Promise<ApiResponse<T>> {
+		const requestKey = `${config.method}:${config.url}:${JSON.stringify(
+			config.data
+		)}`;
+
+		if (this.pendingRequests.has(requestKey)) {
+			return this.pendingRequests.get(requestKey);
+		}
+
+		const requestPromise = this.performRequest<T>(config);
+		this.pendingRequests.set(requestKey, requestPromise);
+
+		try {
+			const result = await requestPromise;
+			return result;
+		} finally {
+			this.pendingRequests.delete(requestKey);
+		}
+	}
+
+	private async performRequest<T = any>(
 		config: AxiosRequestConfig
 	): Promise<ApiResponse<T>> {
 		try {
