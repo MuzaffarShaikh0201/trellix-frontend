@@ -8,19 +8,32 @@ const ThemeContext = createContext({
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
-	const [theme, setTheme] = useState<"light" | "dark">("light");
-
-	useEffect(() => {
-		// Run only on client
-		const storedTheme = window.localStorage.getItem("theme");
-		if (storedTheme) {
-			setTheme(storedTheme as "light" | "dark");
-		} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-			setTheme("dark");
+	const getInitialTheme = () => {
+		if (typeof window !== "undefined") {
+			const storedTheme = window.localStorage.getItem("theme");
+			if (storedTheme) {
+				return storedTheme;
+			}
+			if (window.matchMedia) {
+				if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+					window.localStorage.setItem("theme", "dark");
+					return "dark";
+				}
+				if (
+					window.matchMedia("(prefers-color-scheme: light)").matches
+				) {
+					window.localStorage.setItem("theme", "light");
+					return "light";
+				}
+			}
 		}
-	}, []);
+		return "light";
+	};
+
+	const [theme, setTheme] = useState(getInitialTheme);
 
 	useEffect(() => {
+		setTheme(getInitialTheme);
 		document.documentElement.setAttribute("data-theme", theme);
 		window.localStorage.setItem("theme", theme);
 	}, [theme]);
