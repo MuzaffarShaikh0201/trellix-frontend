@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 
 const ThemeContext = createContext({
 	theme: "light",
@@ -8,39 +8,47 @@ const ThemeContext = createContext({
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
-	const getInitialTheme = () => {
+	const [theme, setTheme] = useState("light");
+	const [isMounted, setIsMounted] = useState(false);
+
+	const getInitialTheme = useCallback(() => {
 		if (typeof window !== "undefined") {
 			const storedTheme = window.localStorage.getItem("theme");
 			if (storedTheme) {
 				return storedTheme;
 			}
-			if (window.matchMedia) {
-				if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-					window.localStorage.setItem("theme", "dark");
-					return "dark";
-				}
-				if (
-					window.matchMedia("(prefers-color-scheme: light)").matches
-				) {
-					window.localStorage.setItem("theme", "light");
-					return "light";
-				}
+
+			if (
+				window.matchMedia &&
+				window.matchMedia("(prefers-color-scheme: dark)").matches
+			) {
+				return "dark";
 			}
 		}
 		return "light";
-	};
-
-	const [theme, setTheme] = useState(getInitialTheme);
+	}, []);
 
 	useEffect(() => {
-		setTheme(getInitialTheme);
+		const initialTheme = getInitialTheme();
+		setTheme(initialTheme);
+		document.documentElement.setAttribute("data-theme", initialTheme);
+		setIsMounted(true);
+	}, [getInitialTheme]);
+
+	useEffect(() => {
+		if (!isMounted) return;
+
 		document.documentElement.setAttribute("data-theme", theme);
 		window.localStorage.setItem("theme", theme);
-	}, [theme]);
+	}, [theme, isMounted]);
 
 	const toggleTheme = () => {
 		setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
 	};
+
+	if (!isMounted) {
+		return <div style={{ visibility: "hidden" }}>{children}</div>;
+	}
 
 	return (
 		<ThemeContext.Provider value={{ theme, toggleTheme }}>
