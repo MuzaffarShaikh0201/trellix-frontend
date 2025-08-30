@@ -33,6 +33,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [theme, setTheme] = useState(getInitialTheme);
 
 	useEffect(() => {
+		setTheme(getInitialTheme);
 		document.documentElement.setAttribute("data-theme", theme);
 		window.localStorage.setItem("theme", theme);
 	}, [theme]);
