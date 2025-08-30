@@ -1,25 +1,122 @@
 import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router";
 
 import Button from "./Button";
 import FormField from "./FormField";
 import GoogleLogo from "../assets/google.svg";
-import { useNavigate, useSearchParams } from "react-router";
+import { useAuth } from "../contexts/AuthContext";
+import { apiService } from "../services/apiService";
+import { showAlert } from "../services/alertService";
 
 const SignUpForm = () => {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
-	const [email, setemail] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	const [searchParams] = useSearchParams();
-	const redirectTo = searchParams.get("redirectTo") || "/";
-
+	const redirectTo = searchParams.get("redirectTo") || "/dashboard";
 	const navigate = useNavigate();
+	const { login } = useAuth();
 
-	const handleLogin = () => {
-		localStorage.setItem("clientSession", "true");
-		navigate(redirectTo, { replace: true });
+	const handleSignUp = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		// Validation
+		if (
+			!firstName ||
+			!lastName ||
+			!email ||
+			!password ||
+			!confirmPassword
+		) {
+			showAlert(
+				"Validation Error",
+				"warning",
+				"Please fill in all fields"
+			);
+			return;
+		}
+
+		if (password !== confirmPassword) {
+			showAlert("Validation Error", "warning", "Passwords do not match");
+			return;
+		}
+
+		if (password.length < 8) {
+			showAlert(
+				"Validation Error",
+				"warning",
+				"Password must be at least 8 characters long"
+			);
+			return;
+		}
+
+		if (!/[A-Z]/.test(password)) {
+			showAlert(
+				"Validation Error",
+				"warning",
+				"Password must contain at least one uppercase letter"
+			);
+			return;
+		}
+
+		if (!/[0-9]/.test(password)) {
+			showAlert(
+				"Validation Error",
+				"warning",
+				"Password must contain at least one number"
+			);
+			return;
+		}
+
+		setLoading(true);
+
+		try {
+			// Call signup API
+			const response = await apiService.request({
+				method: "POST",
+				url: "/auth/register",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				data: {
+					first_name: firstName,
+					last_name: lastName,
+					email,
+					password,
+				},
+			});
+
+			if (!response.success) {
+				throw new Error(response.message || "Signup failed");
+			}
+
+			// Auto-login after successful signup
+			await login({ email, password });
+
+			showAlert("Success", "success", "Account created successfully!");
+			navigate(redirectTo, { replace: true });
+		} catch (error: any) {
+			showAlert(
+				"Signup Failed",
+				"error",
+				error.message ||
+					"An error occurred during signup. Please try again."
+			);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleGoogleSignUp = () => {
+		showAlert(
+			"Coming Soon1",
+			"info",
+			"Google signup will be available soon!"
+		);
 	};
 
 	return (
@@ -30,15 +127,20 @@ const SignUpForm = () => {
 					Trellix
 				</h1>
 			</div>
-			<div className="w-full h-lvh flex flex-col justify-evenly items-center lg:p-4 p-2">
+
+			<form
+				onSubmit={handleSignUp}
+				className="w-full h-lvh flex flex-col justify-evenly items-center lg:p-4 p-2"
+			>
 				<div className="flex flex-col justify-center items-start w-full lg:p-4 p-2 mb-2">
 					<h1 className="text-xl font-bold text-text-primary">
-						SignUp
+						Sign Up
 					</h1>
 					<p className="text-xs text-text-secondary">
 						Welcome! Please create your account to get started.
 					</p>
 				</div>
+
 				<div className="w-full flex flex-col justify-center items-start lg:p-4 p-2 gap-4 mt-2">
 					<div className="w-full flex justify-center items-center gap-4">
 						<FormField
@@ -60,6 +162,7 @@ const SignUpForm = () => {
 							) => setLastName(e.target.value)}
 						/>
 					</div>
+
 					<FormField
 						title="Email"
 						placeholder="Enter your email..."
@@ -67,8 +170,9 @@ const SignUpForm = () => {
 						value={email}
 						handleChange={(
 							e: React.ChangeEvent<HTMLInputElement>
-						) => setemail(e.target.value)}
+						) => setEmail(e.target.value)}
 					/>
+
 					<FormField
 						title="Password"
 						placeholder="Enter your password..."
@@ -78,6 +182,7 @@ const SignUpForm = () => {
 							e: React.ChangeEvent<HTMLInputElement>
 						) => setPassword(e.target.value)}
 					/>
+
 					<FormField
 						title="Confirm Password"
 						placeholder="Confirm your password..."
@@ -88,23 +193,25 @@ const SignUpForm = () => {
 						) => setConfirmPassword(e.target.value)}
 					/>
 				</div>
+
 				<div className="w-full flex flex-col gap-4 justify-center items-center lg:p-4 p-2">
 					<Button
-						title="Sign Up"
+						title={loading ? "Creating Account..." : "Sign Up"}
 						fill={true}
-						handleClick={handleLogin}
-						disabled={false}
+						type="submit"
+						disabled={loading}
 					/>
+
 					<Button
 						title="Sign Up with "
 						imgSrc={GoogleLogo}
 						fill={false}
-						handleClick={() =>
-							console.log("Login with google clicked")
-						}
-						disabled={false}
+						type="button"
+						handleClick={handleGoogleSignUp}
+						disabled={loading}
 					/>
 				</div>
+
 				<div className="w-full flex justify-center items-center lg:p-4 p-2">
 					<p className="text-xs text-text-secondary">
 						Already have an account?{" "}
@@ -116,7 +223,8 @@ const SignUpForm = () => {
 						</a>
 					</p>
 				</div>
-			</div>
+			</form>
+
 			<div className="self-end w-full p-2 lg:hidden flex flex-col justify-center items-center gap-2">
 				<p className="text-xs text-text-secondary">
 					&copy; Trellix 2025

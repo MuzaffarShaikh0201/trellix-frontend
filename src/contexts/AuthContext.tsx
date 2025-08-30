@@ -62,7 +62,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 	const login = async (credentials: any) => {
 		setLoading(true);
 		try {
-			const { tokens, user } = await apiService.login(credentials);
+			const { user } = await apiService.login(credentials);
 			setIsAuthenticated(true);
 			setUser(user);
 

@@ -5,7 +5,7 @@ import Overview from "../components/Overview";
 import LoginForm from "../components/LoginForm";
 import SignUpForm from "../components/SignUpForm";
 
-const Auth = () => {
+const Auth: React.FC = () => {
 	const location = useLocation();
 
 	return (
