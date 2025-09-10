@@ -7,7 +7,7 @@ const Overview = () => {
 			<AnimatedGridPattern
 				numSquares={30}
 				maxOpacity={0.3}
-				duration={2}
+				duration={3}
 				repeatDelay={1}
 				className={cn(
 					"[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
@@ -25,10 +25,15 @@ const Overview = () => {
 						<h1 className="text-4xl font-bold text-text-primary mb-2 select-none">
 							Trellix
 						</h1>
-						<p className="text-sm text-text-secondary text-wrap select-none">
+						{/* <p className="text-sm text-text-secondary text-wrap select-none">
 							A modern, React-powered project management app
 							inspired by Kanban, built for teams to organize
 							tasks, collaborate, and stay productive.
+						</p> */}
+						<p className="text-sm text-text-secondary text-wrap select-none">
+							A modern, React-powered project management app
+							inspired by Kanban, built to organize tasks and stay
+							productive.
 						</p>
 					</div>
 				</div>
@@ -37,7 +42,7 @@ const Overview = () => {
 						&copy; Trellix 2025
 					</p>
 					<a
-						href="#"
+						href="/info#terms-of-use"
 						className="text-sm text-text-secondary hover:underline"
 					>
 						Terms of use & Privacy Policy
