@@ -8,7 +8,6 @@ import CustomAlert from "./components/CustomAlert";
 import Dashboard from "./pages/Dashboard";
 import Auth from "./pages/Auth";
 import AppInfo from "./pages/AppInfo";
-import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
 	const [alert, setAlert] = useState<{
@@ -26,14 +25,12 @@ function App() {
 
 	return (
 		<BrowserRouter>
-			<ThemeProvider>
-				<AuthProvider>
-					{/* Global Alert Container - Always rendered */}
-					<GlobalAlert alert={alert} setAlert={setAlert} />
+			<AuthProvider>
+				{/* Global Alert Container - Always rendered */}
+				<GlobalAlert alert={alert} setAlert={setAlert} />
 
-					<AppRoutes />
-				</AuthProvider>
-			</ThemeProvider>
+				<AppRoutes />
+			</AuthProvider>
 		</BrowserRouter>
 	);
 }
